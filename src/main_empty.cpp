@@ -12,6 +12,8 @@ int main(int argc, char* argv[]) {
 	std::string s1 = "Hejsan";
 	std::cout << s1 << std::endl;
 
+	//YAAA
+
 	//Bortkommentera temporärt följande om Fel 
 	std::cout << std::format("{}-format\n",s1);// C++20
 	std::println("{}-{}!", s1, "println" );    // C++23
