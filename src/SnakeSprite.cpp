@@ -1,0 +1,108 @@
+#include "SnakeSprite.h"
+#include "FoodSprite.h"
+#include <iostream>
+
+namespace snake{
+    int moveCounter = 0;
+    
+    SnakeSprite::SnakeSprite(Engine* eng) : Sprite(400, 300, 20, 20), engine(eng) {
+        direction = Direction::UP;
+        size = 2;
+        
+        body.push_back({400, 300});  
+        body.push_back({400, 320});  
+    }
+    
+    void SnakeSprite::tick(){
+        moveCounter++;
+        if (moveCounter < 5) return;
+        moveCounter = 0;
+        
+        SDL_FPoint newHead = body[0];
+        
+        switch(direction){
+            case Direction::UP:
+                newHead.y -= 20;
+                break;
+            case Direction::DOWN:
+                newHead.y += 20;
+                break;
+            case Direction::LEFT:
+                newHead.x -= 20;
+                break;
+            case Direction::RIGHT:
+                newHead.x += 20;
+                break;
+        }
+        
+        if (newHead.x < 0) {
+            newHead.x = cnts::gScreenWidth - 20;
+        } else if (newHead.x >= cnts::gScreenWidth) {
+            newHead.x = 0;
+        }
+        
+        if (newHead.y < 0) {
+            newHead.y = cnts::gScreenHeight - 20;
+        } else if (newHead.y >= cnts::gScreenHeight) {
+            newHead.y = 0;
+        }
+        
+        for (size_t i = 0; i < body.size(); i++) {
+            if (newHead.x == body[i].x && newHead.y == body[i].y) {
+                engine->gameOver();
+                return;
+            }
+        }
+        
+        // Add new head at the front
+        body.insert(body.begin(), newHead);
+        
+        // Remove tail segment (unless we just ate food)
+        if (body.size() > size) {
+            body.pop_back();
+        }
+        
+        // Update sprite rect to match head position
+        SDL_FRect& r = const_cast<SDL_FRect&>(getRect());
+        r.x = body[0].x;
+        r.y = body[0].y;
+    }
+
+    void SnakeSprite::onCollisionWith(SpritePtr other){
+        if (dynamic_cast<FoodSprite*>(other.get())) {
+            size += 1;
+        } else {
+            engine->gameOver();
+        }
+    }
+
+    void SnakeSprite::onButtonDown(const SDL_Event& event){
+        if(event.type == SDL_EVENT_KEY_DOWN){
+            switch(event.key.key){
+                case SDLK_UP:
+                    direction = Direction::UP;
+                    break;
+                case SDLK_DOWN:
+                    direction = Direction::DOWN;
+                    break;
+                case SDLK_LEFT:
+                    direction = Direction::LEFT;
+                    break;
+                case SDLK_RIGHT:
+                    direction = Direction::RIGHT;
+                    break;
+            }
+        }
+    }
+
+    void SnakeSprite::draw() const {
+        SDL_SetRenderDrawColor(engine->getRen(), 0, 255, 0, 255);
+        
+        // Draw each body segment
+        for (const SDL_FPoint& segment : body) {
+            SDL_FRect segmentRect = {segment.x, segment.y, 20, 20};
+            SDL_RenderFillRect(engine->getRen(), &segmentRect);
+        }
+    }
+}
+

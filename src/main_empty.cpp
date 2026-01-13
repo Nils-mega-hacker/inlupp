@@ -1,23 +1,25 @@
-/*
-  c++_empty
-  skriver ut innehållet i strängen 's1' på 'consol out'
-*/ 
-
+#include "Engine.h"
+#include <memory>
+#include "SnakeSprite.h"
+#include "FoodSprite.h"
 #include <iostream>
-#include <string>
-#include <format> //C++20, bortkommentera temporärt om Fel
-#include <print>  //C++23, bortkommentera temporärt om Fel
+
+using namespace snake;
+using namespace std;
 
 int main(int argc, char* argv[]) {
-	std::string s1 = "Hejsan";
-	std::cout << s1 << std::endl;
+    if (!SDL_Init(SDL_INIT_VIDEO)) {
+        cerr << "SDL_Init failed: " << SDL_GetError() << endl;
+        return 1;
+    }
+	SpritePtr snake = std::make_shared<SnakeSprite>(&eng);
+    SpritePtr food = std::make_shared<FoodSprite>(100,100);
 
-	//YAAA
+    eng.add(snake);
+    eng.add(food);
+    eng.run();
 
-	//Bortkommentera temporärt följande om Fel 
-	std::cout << std::format("{}-format\n",s1);// C++20
-	std::println("{}-{}!", s1, "println" );    // C++23
-	std::print("{}-{}!\n", s1, "print" );      // C++23
-	
+	SDL_Quit();
+
 	return 0;
 }
