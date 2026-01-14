@@ -4,12 +4,15 @@
 #include "SnakeSprite.h"
 
 namespace snake{
-    FoodSprite::FoodSprite() : Sprite(50, 50, 30, 30) {  // Make it 30x30 pixels
+
+    int foodDimensions = 30;
+
+    FoodSprite::FoodSprite() : Sprite(50, 50, foodDimensions, foodDimensions) {  // Make it 30x30 pixels
         xc = 50;
         yc = 50;
     }
 
-    FoodSprite::FoodSprite(float x, float y) : Sprite(x, y, 30, 30), xc(x), yc(y) {}  
+    FoodSprite::FoodSprite(float x, float y) : Sprite(x, y, foodDimensions, foodDimensions), xc(x), yc(y) {}  
     
     void FoodSprite::draw() const{
         const SDL_FRect& r = getRect();
@@ -31,11 +34,12 @@ namespace snake{
         
         // Keep trying random positions until we find one not on the snake
         while (!validPosition) {
-            newX = rand() % (cnts::gScreenWidth - 30);
-            newY = rand() % (cnts::gScreenHeight - 30);
+            newX = rand() % (cnts::gScreenWidth - foodDimensions);
+            newY = rand() % (cnts::gScreenHeight - foodDimensions);
             
             validPosition = true;
             // Check if position overlaps with any snake segment
+            //std::abs = absolutbelopp (bryr  sig inte om det är + eller -)
             for (const SDL_FPoint& segment : body) {
                 if (std::abs(newX - segment.x) < 20 && std::abs(newY - segment.y) < 20) {
                     validPosition = false;

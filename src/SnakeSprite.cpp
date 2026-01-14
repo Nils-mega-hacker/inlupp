@@ -4,8 +4,9 @@
 
 namespace snake{
     int moveCounter = 0;
+    int snakeDimensions = 20;
     
-    SnakeSprite::SnakeSprite(Engine* eng) : Sprite(400, 300, 20, 20), engine(eng) {
+    SnakeSprite::SnakeSprite(Engine* eng) : Sprite(400, 300, snakeDimensions, snakeDimensions), engine(eng) {
         direction = Direction::UP;
         size = 2;
         
@@ -22,27 +23,27 @@ namespace snake{
         
         switch(direction){
             case Direction::UP:
-                newHead.y -= 20;
+                newHead.y -= snakeDimensions;
                 break;
             case Direction::DOWN:
-                newHead.y += 20;
+                newHead.y += snakeDimensions;
                 break;
             case Direction::LEFT:
-                newHead.x -= 20;
+                newHead.x -= snakeDimensions;
                 break;
             case Direction::RIGHT:
-                newHead.x += 20;
+                newHead.x += snakeDimensions;
                 break;
         }
         
         if (newHead.x < 0) {
-            newHead.x = cnts::gScreenWidth - 20;
+            newHead.x = cnts::gScreenWidth - snakeDimensions;
         } else if (newHead.x >= cnts::gScreenWidth) {
             newHead.x = 0;
         }
         
         if (newHead.y < 0) {
-            newHead.y = cnts::gScreenHeight - 20;
+            newHead.y = cnts::gScreenHeight - snakeDimensions;
         } else if (newHead.y >= cnts::gScreenHeight) {
             newHead.y = 0;
         }
@@ -108,7 +109,7 @@ namespace snake{
         SDL_SetRenderDrawColor(engine->getRen(), 0, 255, 0, 255);
         
         for (const SDL_FPoint& segment : body) {
-            SDL_FRect segmentRect = {segment.x, segment.y, 20, 20};
+            SDL_FRect segmentRect = {segment.x, segment.y, snakeDimensions, snakeDimensions};
             SDL_RenderFillRect(engine->getRen(), &segmentRect);
         }
     }

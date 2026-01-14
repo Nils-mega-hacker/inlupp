@@ -28,6 +28,7 @@ namespace snake{
         removed.push_back(spr);
     }
 
+    //osäkert om detta ska vara i motorn? kanske i main, eller en specifik "snakemotor" (SnakeEngine : public Engine)?
     void Engine::gameOver(){
         running = false;
         std::cout << "Game Over!" << std::endl;
@@ -57,7 +58,6 @@ namespace snake{
                 } // switch
             } // while event
 
-            // Process additions FIRST - before anything else
             for(SpritePtr spr : added) {
                 sprites.push_back(spr);
                 if (frameCount == 0) std::cout << "Added sprite to main vector" << std::endl;
