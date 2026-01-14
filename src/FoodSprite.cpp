@@ -7,7 +7,7 @@ namespace snake{
 
     int foodDimensions = 30; //Daniel
 
-    FoodSprite::FoodSprite() : Sprite(50, 50, foodDimensions, foodDimensions) {  // Make it 30x30 pixels
+    FoodSprite::FoodSprite() : Sprite(50, 50, foodDimensions, foodDimensions) {  
         xc = 50;
         yc = 50;
     }

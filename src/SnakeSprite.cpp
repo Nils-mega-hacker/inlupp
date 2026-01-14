@@ -69,6 +69,9 @@ namespace snake{
     void SnakeSprite::onCollisionWith(SpritePtr other){
         if (dynamic_cast<FoodSprite*>(other.get())) {
             size += 1;
+            int random = rand() % 8 + 1;
+            std::string soundName = "eat" + std::to_string(random);
+            engine->playLoadedSound(soundName);
         } else {
             engine->gameOver();
         }
