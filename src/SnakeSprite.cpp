@@ -54,15 +54,12 @@ namespace snake{
             }
         }
         
-        // Add new head at the front
         body.insert(body.begin(), newHead);
         
-        // Remove tail segment (unless we just ate food)
         if (body.size() > size) {
             body.pop_back();
         }
         
-        // Update sprite rect to match head position
         SDL_FRect& r = const_cast<SDL_FRect&>(getRect());
         r.x = body[0].x;
         r.y = body[0].y;
@@ -80,15 +77,27 @@ namespace snake{
         if(event.type == SDL_EVENT_KEY_DOWN){
             switch(event.key.key){
                 case SDLK_UP:
+                    if(direction == Direction::DOWN){
+                        break;
+                    }
                     direction = Direction::UP;
                     break;
                 case SDLK_DOWN:
+                    if(direction == Direction::UP){
+                        break;
+                    }
                     direction = Direction::DOWN;
                     break;
                 case SDLK_LEFT:
+                    if(direction == Direction::RIGHT){
+                        break;
+                    }
                     direction = Direction::LEFT;
                     break;
                 case SDLK_RIGHT:
+                    if(direction == Direction::LEFT){
+                        break;
+                    }
                     direction = Direction::RIGHT;
                     break;
             }
@@ -98,7 +107,6 @@ namespace snake{
     void SnakeSprite::draw() const {
         SDL_SetRenderDrawColor(engine->getRen(), 0, 255, 0, 255);
         
-        // Draw each body segment
         for (const SDL_FPoint& segment : body) {
             SDL_FRect segmentRect = {segment.x, segment.y, 20, 20};
             SDL_RenderFillRect(engine->getRen(), &segmentRect);

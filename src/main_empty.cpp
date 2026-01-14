@@ -12,14 +12,17 @@ int main(int argc, char* argv[]) {
         cerr << "SDL_Init failed: " << SDL_GetError() << endl;
         return 1;
     }
-	SpritePtr snake = std::make_shared<SnakeSprite>(&eng);
-    SpritePtr food = std::make_shared<FoodSprite>(100,100);
-
+    
+    SpritePtr snake = std::make_shared<SnakeSprite>(&eng);
+    SpritePtr food = std::make_shared<FoodSprite>(100, 100);
+    
+    // Give food a reference to the snake
+    std::dynamic_pointer_cast<FoodSprite>(food)->setSnake(snake);
+    
     eng.add(snake);
     eng.add(food);
     eng.run();
 
-	SDL_Quit();
-
-	return 0;
+    SDL_Quit();
+    return 0;
 }

@@ -8,8 +8,9 @@ namespace snake{
     class SnakeSprite : public Sprite{
     public:
         SnakeSprite(Engine* eng);
-        void onButtonDown(const SDL_Event& event);       
-        
+        void onButtonDown(const SDL_Event& event); 
+        const std::vector<SDL_FPoint>& getBody() const { return body; }      
+
         void tick();
         void onCollisionWith(SpritePtr other);
         void draw() const; // Inte virtual

@@ -8,7 +8,7 @@ namespace snake{
 
     Engine::Engine(){
             std::cout << "Creating Engine..." << std::endl;
-            win = SDL_CreateWindow("Ett spel", cnts::gScreenWidth, cnts::gScreenHeight,0);
+            win = SDL_CreateWindow("Snake", cnts::gScreenWidth, cnts::gScreenHeight,0);
             ren = SDL_CreateRenderer(win, NULL);
             srand(time(NULL));
             std::cout << "Engine created. Window: " << win << ", Renderer: " << ren << std::endl;
