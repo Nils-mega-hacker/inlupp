@@ -3,6 +3,8 @@
 #include <vector>
 #include <memory>
 #include "Constants.h"
+#include <map>
+#include <SDL3_image/SDL_image.h>
 #include "ScoreCounter.h"
 
 namespace cnts = constants;
@@ -20,11 +22,24 @@ namespace snake{
         void remove(SpritePtr spr);
         void run();
         void gameOver();
+
+        //ljudeffekter
+        void loadSound(const std::string& name, const std::string& soundFile);
+        void playLoadedSound(const std::string& name);
+        void setSoundVolume(const std::string& name, float volume);
+   
+        // Bakgrundsmusik
+        void updateAudio();
+        void loadBackgroundMusic(const std::string& musicFile);
+        void playBackgroundMusic(bool loop = true);
+        void pauseBackgroundMusic();
+        void resumeBackgroundMusic();
+        void setMusicVolume(float volume); // 0.0 - 1.0
+
     private:
         SDL_Window* win;
         SDL_Renderer* ren;
         std::vector<SpritePtr> sprites, added, removed;
-        std::unique_ptr<ScoreCounter> scoreCounter;
     };
     extern Engine eng;
 }

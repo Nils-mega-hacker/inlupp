@@ -9,14 +9,30 @@ namespace snake{
     bool running = true;
 
     Engine::Engine(){
-            std::cout << "Creating Engine..." << std::endl;
-            win = SDL_CreateWindow("Snake", cnts::gScreenWidth, cnts::gScreenHeight,0);
-            ren = SDL_CreateRenderer(win, NULL);
-            srand(time(NULL));
-            std::cout << "Engine created. Window: " << win << ", Renderer: " << ren << std::endl;
+        std::cout << "Creating Engine..." << std::endl;
+        win = SDL_CreateWindow("Snake", cnts::gScreenWidth, cnts::gScreenHeight,0);
+        ren = SDL_CreateRenderer(win, NULL);
+        srand(time(NULL));
+        
+        SDL_Init(SDL_INIT_AUDIO);
+        soundStream = nullptr;
+        bgMusicStream = nullptr;
+        bgMusicBuffer = nullptr;
+        musicLooping = false;
+        std::cout << "Engine created. Window: " << win << ", Renderer: " << ren << std::endl;
     }
 
     Engine::~Engine(){
+        // Städa ljudeffekter
+        for(auto& pair : audioBuffers){
+            SDL_free(pair.second);
+        }
+        if(soundStream) SDL_DestroyAudioStream(soundStream);
+        
+        // Städa bakgrundsmusik
+        if(bgMusicBuffer) SDL_free(bgMusicBuffer);
+        if(bgMusicStream) SDL_DestroyAudioStream(bgMusicStream);
+        
         SDL_DestroyRenderer(ren);
         SDL_DestroyWindow(win);
     }
@@ -35,6 +51,90 @@ namespace snake{
         running = false;
         std::cout << "Game Over!" << std::endl;
         // ev. visa meny, highscore etc
+    }
+
+    //Audio
+    void Engine::loadSound(const std::string& name, const std::string& soundFile){
+        SDL_AudioSpec spec;
+        Uint8* buf;
+        Uint32 length;
+        
+        if(SDL_LoadWAV(soundFile.c_str(), &spec, &buf, &length)){
+            audioSpecs[name] = spec;
+            audioBuffers[name] = buf;
+            audioLengths[name] = length;
+            
+            if(!soundStream){
+                soundStream = SDL_OpenAudioDeviceStream(
+                    SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK, &spec, NULL, NULL);
+                SDL_ResumeAudioStreamDevice(soundStream);
+            }
+        } else {
+            std::cerr << "Kunde inte ladda " << soundFile << std::endl;
+        }
+    }
+
+    void Engine::loadBackgroundMusic(const std::string& musicFile){
+        if(bgMusicStream){
+            SDL_DestroyAudioStream(bgMusicStream);
+            bgMusicStream = nullptr;
+        }
+        if(bgMusicBuffer){
+            SDL_free(bgMusicBuffer);
+            bgMusicBuffer = nullptr;
+        }
+
+        // ladda ny musik
+        if(SDL_LoadWAV(musicFile.c_str(), &bgMusicSpec, &bgMusicBuffer, &bgMusicLength)){
+            bgMusicStream = SDL_OpenAudioDeviceStream(SDL_AUDIO_DEVICE_DEFAULT_PLAYBACK,
+                                                    &bgMusicSpec, NULL, NULL);
+        }
+    }
+
+    void Engine::playBackgroundMusic(bool loop){
+        if(!bgMusicStream || !bgMusicBuffer) return;
+        musicLooping = loop;
+        SDL_PutAudioStreamData(bgMusicStream, bgMusicBuffer, bgMusicLength);
+        SDL_ResumeAudioStreamDevice(bgMusicStream);
+    }
+
+    void Engine::pauseBackgroundMusic(){
+        if(bgMusicStream){
+            SDL_PauseAudioStreamDevice(bgMusicStream);
+        }
+    }
+
+    void Engine::resumeBackgroundMusic(){
+        if(bgMusicStream){
+            SDL_ResumeAudioStreamDevice(bgMusicStream);
+        }
+    }
+
+    void Engine::setMusicVolume(float volume){
+        if(bgMusicStream){
+            SDL_SetAudioStreamGain(bgMusicStream, volume);
+        }
+    }
+
+    void Engine::setSoundVolume(const std::string& name, float volume){
+        if(audioBuffers.find(name) != audioBuffers.end() && soundStream){
+            SDL_SetAudioStreamGain(soundStream, volume);
+        }
+    }
+
+    void Engine::playLoadedSound(const std::string& name){
+        if(audioBuffers.find(name) != audioBuffers.end()){
+            SDL_ClearAudioStream(soundStream);
+            SDL_PutAudioStreamData(soundStream, audioBuffers[name], audioLengths[name]);
+        }
+    }
+
+    void Engine::updateAudio(){
+        if(bgMusicStream && musicLooping){
+            if(SDL_GetAudioStreamAvailable(bgMusicStream) < bgMusicLength){
+                SDL_PutAudioStreamData(bgMusicStream, bgMusicBuffer, bgMusicLength);
+            }
+        }
     }
 
     void Engine::run(){
@@ -126,6 +226,13 @@ namespace snake{
 
             frameCount++;
 
+            if(bgMusicStream && musicLooping){
+                if(SDL_GetAudioStreamAvailable(bgMusicStream) < bgMusicLength){
+                    SDL_PutAudioStreamData(bgMusicStream, bgMusicBuffer, bgMusicLength);
+                }
+            }
+
+            updateAudio();
             Sint64 delay = nextTick - SDL_GetTicks();
             if (delay > 0)
                 SDL_Delay(delay); 

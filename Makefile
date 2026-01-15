@@ -10,7 +10,7 @@ OBJ_NAME = play
 COMPILER_FLAGS = -std=c++17 -Wall -O0 -g -I$(INCLUDE_DIR)
 
 # SDL bibliotek
-LIBS = -lSDL3 -lSDL3_image
+LIBS = -lSDL3 -lSDL3_image -lSDL3_ttf
 
 # Standard mål
 all: $(BUILD_DIR)/$(OBJ_NAME)
