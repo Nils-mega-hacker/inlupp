@@ -3,6 +3,7 @@
 #include <vector>
 #include <memory>
 #include "Constants.h"
+#include "ScoreCounter.h"
 
 namespace cnts = constants;
 namespace snake{
@@ -23,6 +24,7 @@ namespace snake{
         SDL_Window* win;
         SDL_Renderer* ren;
         std::vector<SpritePtr> sprites, added, removed;
+        std::unique_ptr<ScoreCounter> scoreCounter;
     };
     extern Engine eng;
 }

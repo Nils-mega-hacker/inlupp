@@ -1,6 +1,8 @@
 #include "Engine.h"
 #include "Sprite.h"
+#include "ScoreCounter.h"
 #include <iostream>
+
 
 namespace snake{
     
@@ -38,6 +40,15 @@ namespace snake{
     void Engine::run(){
         const int FPS = 60; // Frames Per Second
         const int TICKINTERVAL = 1000 / FPS; // In miliseconds
+        
+        TTF_Init(); //Initialize TTf
+        TTF_Font* font = TTF_OpenFont("resources/fonts/Outfit-VariableFont_wght.ttf", 24); //Ska vara konstant var?
+        scoreCounter = std::make_unique<ScoreCounter>(ren, font);
+
+
+        if(!font) {
+            std::cerr << SDL_GetError() << std::endl;
+        }
 
         std::cout << "Starting run() - sprites.size(): " << sprites.size() << ", added.size(): " << added.size() << std::endl;
 
@@ -108,6 +119,8 @@ namespace snake{
                 }
                 spr->draw();
             }
+
+            scoreCounter->render();
 
             SDL_RenderPresent(ren);
 
