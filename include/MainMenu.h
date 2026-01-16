@@ -1,12 +1,10 @@
 #include "Engine.h"
-#include <SDL3_ttf/SDL_ttf.h>
 
 namespace snake{
     enum class MenuResult {
         Play,
         Quit
     };
-
 
     class MainMenu{
         public:

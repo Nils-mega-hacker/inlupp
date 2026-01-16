@@ -1,3 +1,5 @@
+//spelklass
+
 enum class Direction{
     UP,
     DOWN,

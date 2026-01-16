@@ -26,8 +26,6 @@ int main(int argc, char* argv[]) {
     }
 
     MainMenu menu(&eng);
-    //menu.run();  // Kör menyn
-
 
     int highScore = 0;
     bool appRunning = true;
@@ -73,23 +71,6 @@ int main(int argc, char* argv[]) {
 
         
     }
-
-    /*
-    // Ladda bakgrundsmusik
-    eng.loadBackgroundMusic(cnts::gResPath + "sounds/Snakemusik.wav");
-    eng.setMusicVolume(0.3);  // 30% volym
-    eng.playBackgroundMusic(true);  // Loop = true
-    
-    SpritePtr snake = std::make_shared<SnakeSprite>(&eng);
-    SpritePtr food = std::make_shared<FoodSprite>(100, 100);
-    
-    // Give food a reference to the snake
-    std::dynamic_pointer_cast<FoodSprite>(food)->setSnake(snake);
-    
-    eng.add(snake);
-    eng.add(food);
-    eng.run();
-*/
 
     TTF_Quit();
     SDL_Quit();

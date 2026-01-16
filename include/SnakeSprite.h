@@ -1,9 +1,9 @@
 #pragma once
-#include "Sprite.h"
-#include "Constants.h"
 #include "Direction.h"
 #include "Engine.h"
+#include "FoodSprite.h"
 
+//spelklass
 namespace snake{
     class SnakeSprite : public Sprite{
     public:
@@ -13,8 +13,7 @@ namespace snake{
 
         void tick();
         void onCollisionWith(SpritePtr other);
-        void draw() const; // Inte virtual
-
+        void draw() const; 
 
         SnakeSprite(const Sprite& other) = delete;
         const SnakeSprite& operator=(const Sprite& other) = delete;
@@ -25,7 +24,6 @@ namespace snake{
         Direction direction;
         int size;
         Engine* engine;
-        std::vector<SDL_FPoint> body;  // Add this - stores each segment position
-
+        std::vector<SDL_FPoint> body;  
     };
 }

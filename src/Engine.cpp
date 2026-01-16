@@ -1,13 +1,7 @@
 #include "Engine.h"
-#include "Sprite.h"
-#include "ScoreCounter.h"
-#include <iostream>
-
 
 namespace snake{
     
-    //bool running = true;
-
     Engine::Engine(){
         std::cout << "Creating Engine..." << std::endl;
         win = SDL_CreateWindow("Snake", cnts::gScreenWidth, cnts::gScreenHeight,0);
@@ -46,11 +40,9 @@ namespace snake{
         removed.push_back(spr);
     }
 
-    //osäkert om detta ska vara i motorn? kanske i main, eller en specifik "snakemotor" (SnakeEngine : public Engine)?
     void Engine::gameOver(){
         running = false;
         std::cout << "Game Over!" << std::endl;
-        // ev. visa meny, highscore etc
     }
 
     //Audio
@@ -142,8 +134,6 @@ namespace snake{
         const int FPS = 60; // Frames Per Second
         const int TICKINTERVAL = 1000 / FPS; // In miliseconds
         
-        //TTF_Init(); //Initialize TTF  
-
         // Ladda font
         TTF_Font* font = TTF_OpenFont(constants::font_str.c_str(), 32);
         if(!font){
@@ -205,7 +195,7 @@ namespace snake{
             }
 
             if(!paused) {
-                // Now tick all sprites
+                // tick all sprites
                 for (SpritePtr spr : sprites)
                     spr->tick();
 
@@ -259,7 +249,6 @@ namespace snake{
         sprites.clear();
         added.clear();
         removed.clear();
-
 
         if(scoreCounter) {
             scoreCounter->reset();

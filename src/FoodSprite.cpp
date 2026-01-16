@@ -1,11 +1,8 @@
 #include "FoodSprite.h"
-#include "Engine.h"
-#include <iostream>
-#include "SnakeSprite.h"
 
 namespace snake{
 
-    int foodDimensions = 30; //Daniel
+    int foodDimensions = 20;
 
     FoodSprite::FoodSprite() : Sprite(50, 50, foodDimensions, foodDimensions) {  
         xc = 50;
@@ -27,7 +24,7 @@ namespace snake{
         SnakeSprite* snake = dynamic_cast<SnakeSprite*>(snakePtr.get());
         if (!snake) return;
         
-        const std::vector<SDL_FPoint>& body = snake->getBody();  // You'll need to add a getter
+        const std::vector<SDL_FPoint>& body = snake->getBody(); 
         
         bool validPosition = false;
         float newX, newY;

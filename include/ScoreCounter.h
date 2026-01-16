@@ -1,7 +1,5 @@
 #pragma once
-#include "Sprite.h"
-#include <SDL3_ttf/SDL_ttf.h>
-
+#include "Engine.h"
 
 class ScoreCounter {
     public:

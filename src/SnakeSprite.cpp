@@ -1,12 +1,14 @@
 #include "SnakeSprite.h"
-#include "FoodSprite.h"
-#include <iostream>
 
 namespace snake{
     int moveCounter = 0;
     int snakeDimensions = 20;
     
-    SnakeSprite::SnakeSprite(Engine* eng) : Sprite(400, 300, snakeDimensions, snakeDimensions), engine(eng) {
+    SnakeSprite::SnakeSprite(Engine* eng) : Sprite(400, 
+                                            300, 
+                                            snakeDimensions, 
+                                            snakeDimensions), 
+                                            engine(eng) {
         direction = Direction::UP;
         size = 2;
         

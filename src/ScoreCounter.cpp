@@ -1,7 +1,4 @@
 #include "ScoreCounter.h"
-#include <iostream>
-#include "Constants.h"
-
 
 ScoreCounter::ScoreCounter(SDL_Renderer* ren, TTF_Font* font) : renderer(ren), font(font), texture(nullptr), score(0) {
     updateTexture();

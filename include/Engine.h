@@ -1,11 +1,16 @@
 #pragma once
 #include <SDL3/SDL.h>
+#include <SDL3_ttf/SDL_ttf.h>
+#include <SDL3_image/SDL_image.h>
+
 #include <vector>
 #include <memory>
-#include "Constants.h"
 #include <map>
-#include <SDL3_image/SDL_image.h>
+#include <iostream>
+
 #include "ScoreCounter.h"
+#include "Constants.h"
+#include "Sprite.h"
 
 namespace cnts = constants;
 namespace snake{

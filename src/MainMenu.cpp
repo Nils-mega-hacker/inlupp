@@ -1,5 +1,4 @@
 #include "MainMenu.h"
-#include <iostream>
 
 namespace snake{
     MainMenu::MainMenu(Engine* eng) : engine(eng){

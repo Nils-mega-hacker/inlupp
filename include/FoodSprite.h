@@ -1,6 +1,8 @@
 #pragma once
-#include "Sprite.h"
+#include "Engine.h"
+#include "SnakeSprite.h"
 
+//spelklass
 namespace snake{
     class FoodSprite : public Sprite{
 
