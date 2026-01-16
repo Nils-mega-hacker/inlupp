@@ -261,7 +261,7 @@ namespace snake{
         scoreCounter->increase();
     }
     
-    int Engine::getScore() {
+    int Engine::getScore() const {
         return scoreCounter->getScore();
     }
 

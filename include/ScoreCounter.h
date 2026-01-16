@@ -5,15 +5,13 @@
 #include <iostream>
 #include "Constants.h"
 
-// TA BORT: #include "Engine.h"
-
 class ScoreCounter {
 public:
     ScoreCounter(SDL_Renderer* renderer, TTF_Font* font);
-    void render();
+    void render() const;
     void increase();
     void reset();
-    int getScore();
+    int getScore() const;
 
 private:
     int score;

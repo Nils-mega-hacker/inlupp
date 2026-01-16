@@ -15,8 +15,6 @@ namespace snake{
             void setLastGameWasHighScore(bool b);
         private:
             Engine* engine;
-            void draw();
-            void handleEvents();
             SDL_Window* win;
             SDL_Renderer* ren;
             SDL_FRect rect;

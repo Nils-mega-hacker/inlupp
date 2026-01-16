@@ -15,7 +15,7 @@ void ScoreCounter::reset() {
     updateTexture();
 }
 
-int ScoreCounter::getScore() {
+int ScoreCounter::getScore() const {
     return score;
 }
 
@@ -48,6 +48,6 @@ void ScoreCounter::updateTexture() {
     SDL_DestroySurface(surface);
 }
 
-void ScoreCounter::render() {
+void ScoreCounter::render() const {
     SDL_RenderTexture(renderer, texture, nullptr, &rect);
 }

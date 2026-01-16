@@ -30,7 +30,7 @@ namespace snake{
         void reset();
         void gameOver();
         void addScore();
-        int getScore();
+        int getScore() const;
 
         //ljudeffekter
         void loadSound(const std::string& name, const std::string& soundFile);
