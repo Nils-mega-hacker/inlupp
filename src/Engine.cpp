@@ -123,7 +123,7 @@ namespace snake{
 
     void Engine::updateAudio(){
         if(bgMusicStream && musicLooping){
-            if(SDL_GetAudioStreamAvailable(bgMusicStream) < bgMusicLength){
+            if (static_cast<Uint32>(SDL_GetAudioStreamAvailable(bgMusicStream)) < bgMusicLength){
                 SDL_PutAudioStreamData(bgMusicStream, bgMusicBuffer, bgMusicLength);
             }
         }
@@ -233,7 +233,7 @@ namespace snake{
             frameCount++;
 
             if(bgMusicStream && musicLooping){
-                if(SDL_GetAudioStreamAvailable(bgMusicStream) < bgMusicLength){
+                if (static_cast<Uint32>(SDL_GetAudioStreamAvailable(bgMusicStream)) < bgMusicLength){
                     SDL_PutAudioStreamData(bgMusicStream, bgMusicBuffer, bgMusicLength);
                 }
             }

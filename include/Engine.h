@@ -8,11 +8,12 @@
 #include <map>
 #include <iostream>
 
-#include "ScoreCounter.h"
 #include "Constants.h"
 #include "Sprite.h"
+#include "ScoreCounter.h"
 
 namespace cnts = constants;
+
 namespace snake{
     class Sprite;
     typedef std::shared_ptr<Sprite> SpritePtr;
@@ -62,7 +63,8 @@ namespace snake{
         Uint32 bgMusicLength;
         SDL_AudioStream* bgMusicStream;
         bool musicLooping;
-        std::unique_ptr<ScoreCounter> scoreCounter;
+        
+        std::unique_ptr<ScoreCounter> scoreCounter;  
         
     };
     extern Engine eng;

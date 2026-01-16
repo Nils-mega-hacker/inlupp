@@ -59,7 +59,7 @@ namespace snake{
         
         body.insert(body.begin(), newHead);
         
-        if (body.size() > size) {
+        if (body.size() > static_cast<size_t>(size)){
             body.pop_back();
         }
         
@@ -114,7 +114,7 @@ namespace snake{
         SDL_SetRenderDrawColor(engine->getRen(), 0, 255, 0, 255);
         
         for (const SDL_FPoint& segment : body) {
-            SDL_FRect segmentRect = {segment.x, segment.y, snakeDimensions, snakeDimensions};
+            SDL_FRect segmentRect = {segment.x, segment.y, static_cast<float>(snakeDimensions), static_cast<float>(snakeDimensions)};
             SDL_RenderFillRect(engine->getRen(), &segmentRect);
         }
     }
