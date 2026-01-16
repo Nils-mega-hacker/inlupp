@@ -1,7 +1,7 @@
 #include "ScoreCounter.h"
 
-ScoreCounter::ScoreCounter(SDL_Renderer* ren, TTF_Font* font)
-    : renderer(ren), font(font), score(0), texture(nullptr) {
+ScoreCounter::ScoreCounter(SDL_Renderer* ren, TTF_Font* f)
+    : score(0), renderer(ren), font(f), texture(nullptr) {  
     updateTexture();
 }
 
@@ -25,16 +25,14 @@ void ScoreCounter::updateTexture() {
     }
 
     SDL_Color white = {255, 255, 255, 255};
-
     std::string text = "Score: " + std::to_string(score);
 
     SDL_Surface* surface = TTF_RenderText_Solid(font, text.c_str(), text.length(), white);
 
     if (!surface) {
         std::cout << "Text surface failed: " << SDL_GetError() << std::endl;
-     return;
+        return;
     }
-
 
     texture = SDL_CreateTextureFromSurface(renderer, surface);
 
@@ -44,7 +42,7 @@ void ScoreCounter::updateTexture() {
 
     rect.w = surface->w;
     rect.h = surface->h;
-    rect.x = (constants::gScreenWidth  - rect.w) / 2.0f;
+    rect.x = (constants::gScreenWidth - rect.w) / 2.0f;
     rect.y = 20;
     
     SDL_DestroySurface(surface);

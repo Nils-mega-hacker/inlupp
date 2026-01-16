@@ -51,6 +51,7 @@ namespace snake{
         SDL_Window* win;
         SDL_Renderer* ren;
         std::vector<SpritePtr> sprites, added, removed;
+        
         // Ljudeffekter
         std::map<std::string, SDL_AudioSpec> audioSpecs;
         std::map<std::string, Uint8*> audioBuffers;
