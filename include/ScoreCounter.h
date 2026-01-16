@@ -7,12 +7,15 @@ class ScoreCounter {
     public:
     ScoreCounter(SDL_Renderer* renderer, TTF_Font* font);
     void render();
+    void increase();
+    void reset();
+    int getScore();
 
 
     private:
     int score;
     void updateTexture();
-    void increase();
+    
 
     SDL_Renderer* renderer;
     TTF_Font* font;

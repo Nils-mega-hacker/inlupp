@@ -22,9 +22,10 @@ namespace snake{
         if(font) TTF_CloseFont(font);
     }
 
-    void MainMenu::run(){
+    MenuResult MainMenu::run(){
         bool running = true;
         bool isHovering = false;
+        
         
         SDL_FRect btnRect = { constants::gScreenWidth/2 - 200, 
                              constants::gScreenHeight/2 + 50,
@@ -43,12 +44,12 @@ namespace snake{
             while(SDL_PollEvent(&event)){
                 switch(event.type){
                     case SDL_EVENT_QUIT:
-                        exit(0);
+                        return MenuResult::Quit;
                         break;
 
                     case SDL_EVENT_KEY_DOWN:
                         if(event.key.key == SDLK_RETURN){
-                            running = false;
+                            return MenuResult::Play;
                         }
                         break;
 
@@ -58,7 +59,7 @@ namespace snake{
                             float my = event.button.y;
                             if(mx >= btnRect.x && mx <= btnRect.x + btnRect.w &&
                             my >= btnRect.y && my <= btnRect.y + btnRect.h){
-                                running = false;
+                                return MenuResult::Play;
                             }
                         }
                         break;
@@ -88,6 +89,63 @@ namespace snake{
                                    titleW, titleH };
             SDL_RenderTexture(ren, titleTex, NULL, &titleRect);
             SDL_DestroyTexture(titleTex);
+
+
+            // Rita high score text
+             TTF_Font* smallFont = TTF_OpenFont(constants::font_str.c_str(), 32);
+            if(!font){
+                std::cerr << "TTF_OpenFont failed: " << std::endl;
+            }
+
+            std::string hsText = "HIGH SCORE: " + std::to_string(highScore);
+
+            SDL_Color hsColor = {200, 200, 200, 255};
+
+            SDL_Surface* hsSurf =
+                TTF_RenderText_Solid(smallFont, hsText.c_str(), hsText.length(), hsColor);
+
+            SDL_Texture* hsTex = SDL_CreateTextureFromSurface(ren, hsSurf);
+            SDL_DestroySurface(hsSurf);
+
+            float hsW, hsH;
+            SDL_GetTextureSize(hsTex, &hsW, &hsH);
+
+            SDL_FRect hsRect = {
+                constants::gScreenWidth / 2 - hsW / 2,
+                20,   // vertical position under title
+                hsW,
+                hsH
+            };
+
+       if (lastGameWasHighScore) {
+            std::string msg = "NEW HIGH SCORE!";
+            SDL_Color gold = {255, 215, 0, 255};
+
+            SDL_Surface* msgSurf =
+                TTF_RenderText_Solid(smallFont, msg.c_str(), msg.length(), gold);
+
+            SDL_Texture* msgTex = SDL_CreateTextureFromSurface(ren, msgSurf);
+            SDL_DestroySurface(msgSurf);
+
+            float mw, mh;
+            SDL_GetTextureSize(msgTex, &mw, &mh);
+
+            SDL_FRect msgRect = {
+                constants::gScreenWidth / 2 - mw / 2,
+                60,
+                mw,
+                mh
+            };
+
+            SDL_RenderTexture(ren, msgTex, nullptr, &msgRect);
+            SDL_DestroyTexture(msgTex);
+        }
+
+
+
+            SDL_RenderTexture(ren, hsTex, nullptr, &hsRect);
+            SDL_DestroyTexture(hsTex);
+
 
             // Rita orm
             SDL_SetRenderDrawColor(ren, 0, 255, 0, 255);
@@ -122,5 +180,18 @@ namespace snake{
             SDL_RenderPresent(ren);
             SDL_Delay(16);
         }
+
+        return MenuResult::Quit;
     }
+
+
+    void MainMenu::setHighScore(int score) {
+        highScore = score;
+    }
+
+    void MainMenu::setLastGameWasHighScore(bool b) {
+        lastGameWasHighScore = b;
+    }
+
+
 }

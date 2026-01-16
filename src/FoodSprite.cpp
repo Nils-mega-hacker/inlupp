@@ -53,6 +53,9 @@ namespace snake{
         r.y = newY;
         xc = newX;
         yc = newY;
+
+        snake::eng.addScore();
     }
+
     void FoodSprite::tick() {}
 }

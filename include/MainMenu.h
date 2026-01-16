@@ -2,11 +2,19 @@
 #include <SDL3_ttf/SDL_ttf.h>
 
 namespace snake{
+    enum class MenuResult {
+        Play,
+        Quit
+    };
+
+
     class MainMenu{
         public:
             MainMenu(Engine* eng);
             ~MainMenu();
-            void run();
+            MenuResult run();
+            void setHighScore(int score);
+            void setLastGameWasHighScore(bool b);
         private:
             Engine* engine;
             void draw();
@@ -16,5 +24,7 @@ namespace snake{
             SDL_FRect rect;
             std::string txt;
             TTF_Font* font;
+            int highScore = 0;
+            bool lastGameWasHighScore = false;
     };
 }

@@ -6,7 +6,7 @@
 
 namespace snake{
     
-    bool running = true;
+    //bool running = true;
 
     Engine::Engine(){
         std::cout << "Creating Engine..." << std::endl;
@@ -138,17 +138,23 @@ namespace snake{
     }
 
     void Engine::run(){
+        running = true;
         const int FPS = 60; // Frames Per Second
         const int TICKINTERVAL = 1000 / FPS; // In miliseconds
         
-        TTF_Init(); //Initialize TTf
-        TTF_Font* font = TTF_OpenFont("resources/fonts/Outfit-VariableFont_wght.ttf", 24); //Ska vara konstant var?
-        scoreCounter = std::make_unique<ScoreCounter>(ren, font);
+        //TTF_Init(); //Initialize TTF  
 
+        // Ladda font
+        TTF_Font* font = TTF_OpenFont(constants::font_str.c_str(), 32);
+        if(!font){
+            std::cerr << "TTF_OpenFont failed: " << std::endl;
+        }
 
         if(!font) {
             std::cerr << SDL_GetError() << std::endl;
         }
+
+        scoreCounter = std::make_unique<ScoreCounter>(ren, font);
 
         std::cout << "Starting run() - sprites.size(): " << sprites.size() << ", added.size(): " << added.size() << std::endl;
 
@@ -160,12 +166,20 @@ namespace snake{
             while (SDL_PollEvent(&event)){
                 switch (event.type){
                     case SDL_EVENT_QUIT:
-                        running = false; 
+                        std::exit(0);
                         break;
                     case SDL_EVENT_KEY_DOWN:
-                        for(SpritePtr spr : sprites)
-                            spr->onButtonDown(event);
+                        if(event.key.key == SDLK_SPACE) {
+                            paused = !paused;
+                            break;
+                        }
+
+                        if(!paused) {
+                            for(SpritePtr spr : sprites)
+                                spr->onButtonDown(event);
+                        }
                         break;
+                
                 } // switch
             } // while event
 
@@ -190,16 +204,18 @@ namespace snake{
                 std::cout << "Frame 0: sprites.size() = " << sprites.size() << std::endl;
             }
 
-            // Now tick all sprites
-            for (SpritePtr spr : sprites)
-                spr->tick();
+            if(!paused) {
+                // Now tick all sprites
+                for (SpritePtr spr : sprites)
+                    spr->tick();
 
-            // Check collisions
-            for(SpritePtr sp1 : sprites){
-                for(SpritePtr sp2 : sprites){
-                    if(sp1 != sp2 && sp1->collidedWith(sp2)){
-                        sp1->onCollisionWith(sp2);
-                        sp2->onCollisionWith(sp1);
+                // Check collisions
+                for(SpritePtr sp1 : sprites){
+                    for(SpritePtr sp2 : sprites){
+                        if(sp1 != sp2 && sp1->collidedWith(sp2)){
+                            sp1->onCollisionWith(sp2);
+                            sp2->onCollisionWith(sp1);
+                        }
                     }
                 }
             }
@@ -238,6 +254,27 @@ namespace snake{
                 SDL_Delay(delay); 
         } // while running
     } // run
+
+    void Engine::reset() {
+        sprites.clear();
+        added.clear();
+        removed.clear();
+
+
+        if(scoreCounter) {
+            scoreCounter->reset();
+        }
+
+     running = true;
+    }
+
+    void Engine::addScore() {
+        scoreCounter->increase();
+    }
+    
+    int Engine::getScore() {
+        return scoreCounter->getScore();
+    }
 
     Engine eng;
 }
